@@ -136,6 +136,44 @@ table.ft tr:hover td{background:#fdf8f9}
 .sub-pill:hover:not(.active){border-color:#156082;color:#156082}
 .subsubpage{display:none}
 .subsubpage.active{display:block}
+.cq-tabs{display:flex;gap:6px;margin-bottom:1.5rem;border-bottom:2px solid #eef1f4;padding-bottom:0}
+.cq-tab{padding:8px 18px;font-size:13px;font-weight:500;cursor:pointer;color:#899298;border-bottom:3px solid transparent;margin-bottom:-2px;transition:all .15s;user-select:none}
+.cq-tab:hover{color:#042433}
+.cq-tab.active{color:#E6223D;border-bottom-color:#E6223D;font-weight:600}
+.cq-panel{display:none}
+.cq-panel.active{display:block}
+.cq-form{background:white;border-radius:12px;padding:1.5rem;box-shadow:0 1px 4px rgba(4,36,51,.08);max-width:700px}
+.cq-form h3{font-size:15px;font-weight:700;color:#042433;margin-bottom:1.25rem}
+.cq-field{margin-bottom:1rem}
+.cq-field label{display:block;font-size:12px;font-weight:600;color:#042433;margin-bottom:5px;text-transform:uppercase;letter-spacing:.05em}
+.cq-field input,.cq-field select,.cq-field textarea{width:100%;padding:9px 12px;border:1.5px solid #dde3e8;border-radius:8px;font-size:13px;color:#222;background:#fafbfc;outline:none;transition:border .15s;font-family:inherit}
+.cq-field input:focus,.cq-field select:focus,.cq-field textarea:focus{border-color:#E6223D;background:white}
+.cq-field textarea{resize:vertical;min-height:100px}
+.cq-btn{padding:10px 24px;background:#E6223D;color:white;border:none;border-radius:8px;cursor:pointer;font-size:13px;font-weight:600;transition:background .15s}
+.cq-btn:hover{background:#B01A2E}
+.cq-btn.secondary{background:#042433}
+.cq-btn.secondary:hover{background:#0a3a54}
+.cq-card{background:white;border-radius:10px;padding:1.25rem;box-shadow:0 1px 4px rgba(4,36,51,.08);margin-bottom:1rem;border-left:4px solid #dde3e8}
+.cq-card.pendiente{border-left-color:#E6223D}
+.cq-card.respondida{border-left-color:#1a6e3a}
+.cq-card-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:.75rem;flex-wrap:wrap;gap:.5rem}
+.cq-card-meta{display:flex;align-items:center;gap:.75rem;flex-wrap:wrap}
+.cq-status{display:inline-block;padding:3px 10px;border-radius:12px;font-size:11px;font-weight:700}
+.cq-status.pendiente{background:#fde0e4;color:#E6223D}
+.cq-status.respondida{background:#e0f5e9;color:#1a6e3a}
+.cq-categoria{display:inline-block;padding:3px 10px;border-radius:12px;font-size:11px;font-weight:600;background:#e8f0fb;color:#156082}
+.cq-nombre{font-size:13px;font-weight:700;color:#042433}
+.cq-fecha{font-size:11px;color:#899298}
+.cq-pregunta{font-size:13px;color:#222;line-height:1.6;margin-bottom:.75rem}
+.cq-respuesta-box{background:#f4f6f8;border-radius:8px;padding:.875rem;margin-top:.75rem}
+.cq-respuesta-label{font-size:11px;font-weight:700;color:#1a6e3a;text-transform:uppercase;letter-spacing:.05em;margin-bottom:5px}
+.cq-respuesta-text{font-size:13px;color:#222;line-height:1.6}
+.cq-resp-form{margin-top:.75rem;display:flex;flex-direction:column;gap:.5rem}
+.cq-resp-form textarea{width:100%;padding:8px 12px;border:1.5px solid #dde3e8;border-radius:8px;font-size:13px;color:#222;background:#fafbfc;outline:none;font-family:inherit;resize:vertical;min-height:80px}
+.cq-resp-form textarea:focus{border-color:#1a6e3a;background:white}
+.cq-empty{text-align:center;padding:3rem;color:#899298;font-size:14px;background:white;border-radius:10px}
+.cq-badge{background:#E6223D;color:white;border-radius:10px;padding:1px 7px;font-size:11px;font-weight:700;margin-left:6px}
+.subsubpage.active{display:block}
 .alert-info{background:#e8f0fb;border:1.5px solid #b5d4f4;border-radius:10px;padding:1rem 1.25rem;margin-bottom:1.25rem;display:flex;align-items:flex-start;gap:10px}
 .alert-info .icon{font-size:20px;flex-shrink:0}
 .alert-info .text{font-size:13px;color:#042433;line-height:1.6}
@@ -174,6 +212,7 @@ table.ft tr:hover td{background:#fdf8f9}
   <div class="ni active" onclick="showPage('flujos',this)">Flujos Procesales</div>
   <div class="ni" onclick="showPage('sentencias',this)">Sentencias y Pagos</div>
   <div class="ni" onclick="showPage('internos',this)">Flujos Internos</div>
+  <div class="ni" onclick="showPage('consultas',this)">Consultas Paralegales</div>
 </div></div>
 
 <div class="wrap">
@@ -821,6 +860,85 @@ table.ft tr:hover td{background:#fdf8f9}
 
 </div>
 
+<!-- ═══════════════════════════════════════════════════════════════════
+     PAGE 4 — CONSULTAS PARALEGALES
+═══════════════════════════════════════════════════════════════════ -->
+<div class="page" id="page-consultas">
+  <div style="padding:1.25rem 0 1rem;display:flex;align-items:center;justify-content:space-between">
+    <div>
+      <h2 style="font-size:17px;font-weight:700;color:#042433">Consultas Paralegales</h2>
+      <p style="font-size:13px;color:#899298;margin-top:2px">Espacio para consultas del equipo — con registro y respuesta</p>
+    </div>
+  </div>
+
+  <div class="cq-tabs">
+    <div class="cq-tab active" onclick="showCQTab('nueva',this)">➕ Nueva consulta</div>
+    <div class="cq-tab" onclick="showCQTab('pendientes',this)">📬 Pendientes <span class="cq-badge" id="cq-count-pendientes">0</span></div>
+  </div>
+
+  <!-- NUEVA CONSULTA -->
+  <div class="cq-panel active" id="cq-nueva">
+    <div class="cq-form">
+      <h3>📝 Registrar nueva consulta</h3>
+      <div class="cq-field">
+        <label>Tu nombre</label>
+        <select id="cq-nombre">
+          <option value="">— Selecciona tu nombre —</option>
+          <option>Claudia</option>
+          <option>Edu</option>
+          <option>Nestor</option>
+          <option>Jemima</option>
+          <option>Jose</option>
+          <option>Camila</option>
+          <option>Brando</option>
+          <option>Alessandra</option>
+          <option>Joselin</option>
+          <option>Alexis</option>
+        </select>
+      </div>
+      <div class="cq-field">
+        <label>Categoría</label>
+        <select id="cq-categoria">
+          <option value="">— Selecciona una categoría —</option>
+          <option>Agendamiento</option>
+          <option>Plazos procesales</option>
+          <option>Archivo Definitivo</option>
+          <option>Notificaciones</option>
+          <option>Flujo TC</option>
+          <option>Tareas Contingentes</option>
+          <option>Interposición de ACA</option>
+          <option>Sentencias y Pagos</option>
+          <option>MyBiG / George</option>
+          <option>Net Documents</option>
+          <option>Otro</option>
+        </select>
+      </div>
+      <div class="cq-field">
+        <label>Tu consulta</label>
+        <textarea id="cq-consulta" placeholder="Describe tu consulta con el mayor detalle posible..."></textarea>
+      </div>
+      <div style="display:flex;align-items:center;gap:1rem">
+        <button class="cq-btn" onclick="enviarConsulta()">Enviar consulta</button>
+        <span id="cq-msg" style="font-size:13px;color:#1a6e3a;display:none">✅ Consulta registrada</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- PENDIENTES -->
+  <div class="cq-panel" id="cq-pendientes">
+    <div id="cq-list-pendientes"></div>
+  </div>
+
+  <!-- RESPONDIDAS — siempre visible abajo -->
+  <div style="margin-top:2rem">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:1rem">
+      <div style="font-size:15px;font-weight:700;color:#042433">✅ Consultas Respondidas</div>
+      <span style="font-size:12px;color:#899298">Historial visible para todo el equipo</span>
+    </div>
+    <div id="cq-list-respondidas"></div>
+  </div>
+</div>
+
 </div><!-- /wrap -->
 
 <script>
@@ -998,10 +1116,152 @@ async function aiSearch() {
 
 document.getElementById("aiInput").addEventListener("keydown", e => { if (e.key === "Enter") aiSearch(); });
 
+// ── CONSULTAS PARALEGALES ─────────────────────────────────────────────
+function showCQTab(name, el) {
+  document.querySelectorAll('.cq-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.cq-panel').forEach(p => p.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('cq-' + name).classList.add('active');
+  if (name === 'pendientes') renderCQ('pendientes');
+}
+
+async function getCQ() {
+  try {
+    const res = await window.storage.get('consultas');
+    return res ? JSON.parse(res.value) : [];
+  } catch(e) { return []; }
+}
+
+async function saveCQ(data) {
+  await window.storage.set('consultas', JSON.stringify(data), true);
+}
+
+async function enviarConsulta() {
+  const nombre = document.getElementById('cq-nombre').value.trim();
+  const categoria = document.getElementById('cq-categoria').value;
+  const consulta = document.getElementById('cq-consulta').value.trim();
+  if (!nombre || !categoria || !consulta) {
+    alert('Por favor completa todos los campos.');
+    return;
+  }
+  const fecha = new Date().toLocaleDateString('es-PE', {day:'2-digit',month:'2-digit',year:'numeric'});
+  const data = await getCQ();
+  data.unshift({
+    id: Date.now(),
+    nombre,
+    categoria,
+    consulta,
+    respuesta: '',
+    respondidoPor: '',
+    estado: 'pendiente',
+    fecha,
+    fechaRespuesta: ''
+  });
+  await saveCQ(data);
+
+  // Notificar por Teams
+  try {
+    await fetch('https://vinateaytoyama.webhook.office.com/webhookb2/95624d5b-ca93-46d8-a883-d86797afe80e@5d66dd42-f62c-4f3e-9cb6-cf2a29a623a4/IncomingWebhook/535e1a71150a47dea1a4ca8a998fe75c/10cac26c-420a-4e6f-a583-97f0f501c17c/V2jZJpVyNfIHDxqg70f7D3vFQRZVBUIxzys1Rn6d_wDjk1', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        "@type": "MessageCard",
+        "@context": "http://schema.org/extensions",
+        "themeColor": "E6223D",
+        "summary": "Nueva consulta paralegal",
+        "sections": [{
+          "activityTitle": "📋 Nueva Consulta Paralegal",
+          "activitySubtitle": fecha,
+          "facts": [
+            {"name": "👤 De:", "value": nombre},
+            {"name": "📂 Categoría:", "value": categoria},
+            {"name": "❓ Consulta:", "value": consulta}
+          ],
+          "markdown": true
+        }]
+      })
+    });
+  } catch(e) {
+    console.log('Teams webhook error:', e);
+  }
+
+  document.getElementById('cq-nombre').value = '';
+  document.getElementById('cq-categoria').value = '';
+  document.getElementById('cq-consulta').value = '';
+  const msg = document.getElementById('cq-msg');
+  msg.style.display = 'inline';
+  setTimeout(() => msg.style.display = 'none', 3000);
+  renderCQ('respondidas');
+  actualizarBadge();
+}
+
+async function actualizarBadge() {
+  const data = await getCQ();
+  const pendientes = data.filter(c => c.estado === 'pendiente').length;
+  document.getElementById('cq-count-pendientes').textContent = pendientes;
+}
+
+async function renderCQ(tipo) {
+  const data = await getCQ();
+  const filtered = data.filter(c => c.estado === tipo);
+  const container = document.getElementById('cq-list-' + tipo);
+  if (!filtered.length) {
+    container.innerHTML = `<div class="cq-empty">${tipo === 'pendientes' ? '📬 No hay consultas pendientes' : '✅ No hay consultas respondidas aún'}</div>`;
+    return;
+  }
+  container.innerHTML = filtered.map(c => `
+    <div class="cq-card ${c.estado}" id="card-${c.id}">
+      <div class="cq-card-header">
+        <div class="cq-card-meta">
+          <span class="cq-nombre">👤 ${c.nombre}</span>
+          <span class="cq-categoria">${c.categoria}</span>
+          <span class="cq-status ${c.estado}">${c.estado === 'pendiente' ? '⏳ Pendiente' : '✅ Respondida'}</span>
+        </div>
+        <span class="cq-fecha">${c.fecha}</span>
+      </div>
+      <div class="cq-pregunta"><strong>Consulta:</strong> ${c.consulta}</div>
+      ${c.estado === 'respondida' ? `
+        <div class="cq-respuesta-box">
+          <div class="cq-respuesta-label">Respuesta de ${c.respondidoPor}</div>
+          <div class="cq-respuesta-text">${c.respuesta}</div>
+          ${c.fechaRespuesta ? `<div style="font-size:11px;color:#899298;margin-top:4px">${c.fechaRespuesta}</div>` : ''}
+        </div>` : `
+        <div class="cq-resp-form">
+          <div style="font-size:12px;font-weight:600;color:#042433">Responder:</div>
+          <input type="text" placeholder="Tu nombre (quien responde)" id="resp-nombre-${c.id}" style="padding:7px 12px;border:1.5px solid #dde3e8;border-radius:8px;font-size:13px;outline:none;font-family:inherit"/>
+          <textarea placeholder="Escribe la respuesta..." id="resp-text-${c.id}"></textarea>
+          <div>
+            <button class="cq-btn secondary" onclick="responderConsulta(${c.id})" style="padding:7px 16px;font-size:12px">Guardar respuesta</button>
+          </div>
+        </div>`}
+    </div>`).join('');
+}
+
+async function responderConsulta(id) {
+  const nombre = document.getElementById('resp-nombre-' + id)?.value.trim();
+  const texto = document.getElementById('resp-text-' + id)?.value.trim();
+  if (!nombre || !texto) { alert('Completa el nombre y la respuesta.'); return; }
+  const data = await getCQ();
+  const idx = data.findIndex(c => c.id === id);
+  if (idx >= 0) {
+    data[idx].respuesta = texto;
+    data[idx].respondidoPor = nombre;
+    data[idx].estado = 'respondida';
+    data[idx].fechaRespuesta = new Date().toLocaleDateString('es-PE', {day:'2-digit',month:'2-digit',year:'numeric'});
+    await saveCQ(data);
+    renderCQ('pendientes');
+    renderCQ('respondidas');
+    actualizarBadge();
+  }
+}
+
 // ── INIT ──────────────────────────────────────────────────────────────
 renderTabs();
 populateFilters();
 filterTable();
+actualizarBadge();
+renderCQ('pendientes');
+renderCQ('respondidas');
 </script>
 </body>
 </html>
