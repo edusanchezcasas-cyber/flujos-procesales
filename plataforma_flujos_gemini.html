@@ -1259,8 +1259,10 @@ async function actualizarBadge() {
 
 async function renderCQ(tipo) {
   const data = await getCQ();
-  const filtered = data.filter(c => c.estado === tipo);
+  const estadoFiltro = tipo === 'pendientes' ? 'pendiente' : 'respondida';
+  const filtered = data.filter(c => c.estado === estadoFiltro);
   const container = document.getElementById('cq-list-' + tipo);
+  if (!container) return;
   if (!filtered.length) {
     container.innerHTML = `<div class="cq-empty">${tipo === 'pendientes' ? '📬 No hay consultas pendientes' : '✅ No hay consultas respondidas aún'}</div>`;
     return;
@@ -1273,9 +1275,9 @@ async function renderCQ(tipo) {
           <span class="cq-categoria">${c.categoria}</span>
           <span class="cq-status ${c.estado}">${c.estado === 'pendiente' ? '⏳ Pendiente' : '✅ Respondida'}</span>
         </div>
-        <span class="cq-fecha">${c.fecha}</span>
+        <span class="cq-fecha">📅 ${c.fecha}</span>
       </div>
-      <div class="cq-pregunta"><strong>Consulta:</strong> ${c.consulta}</div>
+      <div class="cq-pregunta"><strong>Detalle:</strong> ${c.consulta}</div>
       ${c.estado === 'respondida' ? `
         <div class="cq-respuesta-box">
           <div class="cq-respuesta-label">Respuesta de ${c.respondidoPor}</div>
@@ -1283,11 +1285,16 @@ async function renderCQ(tipo) {
           ${c.fechaRespuesta ? `<div style="font-size:11px;color:#899298;margin-top:4px">${c.fechaRespuesta}</div>` : ''}
         </div>` : `
         <div class="cq-resp-form">
-          <div style="font-size:12px;font-weight:600;color:#042433">Responder:</div>
-          <input type="text" placeholder="Tu nombre (quien responde)" id="resp-nombre-${c.id}" style="padding:7px 12px;border:1.5px solid #dde3e8;border-radius:8px;font-size:13px;outline:none;font-family:inherit"/>
+          <div style="font-size:12px;font-weight:600;color:#042433;margin-bottom:4px">Responder:</div>
+          <select id="resp-nombre-${c.id}" style="padding:7px 12px;border:1.5px solid #dde3e8;border-radius:8px;font-size:13px;outline:none;font-family:inherit;background:#fafbfc;color:#222;width:100%">
+            <option value="">— Quien responde —</option>
+            <option>Claudia</option><option>Edu</option><option>Nestor</option>
+            <option>Jemima</option><option>Jose</option><option>Camila</option>
+            <option>Brando</option><option>Alessandra</option><option>Joselin</option><option>Alexis</option>
+          </select>
           <textarea placeholder="Escribe la respuesta..." id="resp-text-${c.id}"></textarea>
           <div>
-            <button class="cq-btn secondary" onclick="responderConsulta(${c.id})" style="padding:7px 16px;font-size:12px">Guardar respuesta</button>
+            <button class="cq-btn secondary" onclick="responderConsulta(${c.id})" style="padding:7px 16px;font-size:12px">💬 Guardar respuesta</button>
           </div>
         </div>`}
     </div>`).join('');
