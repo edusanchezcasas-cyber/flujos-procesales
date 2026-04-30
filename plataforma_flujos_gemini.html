@@ -935,9 +935,14 @@ table.ft tr:hover td{background:#fdf8f9}
 
   <!-- RESPONDIDAS — siempre visible abajo -->
   <div style="margin-top:2rem">
-    <div style="display:flex;align-items:center;gap:10px;margin-bottom:1rem">
-      <div style="font-size:15px;font-weight:700;color:#042433">✅ Consultas Respondidas</div>
-      <span style="font-size:12px;color:#899298">Historial visible para todo el equipo</span>
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:1rem;flex-wrap:wrap">
+      <div style="display:flex;align-items:center;gap:10px">
+        <div style="font-size:15px;font-weight:700;color:#042433">✅ Consultas Respondidas</div>
+        <span style="font-size:12px;color:#899298">Historial visible para todo el equipo</span>
+      </div>
+      <button onclick="exportarConsultas()" style="padding:7px 16px;background:#042433;color:white;border:none;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer">
+        📥 Exportar Excel
+      </button>
     </div>
     <div id="cq-list-respondidas"></div>
   </div>
@@ -1283,7 +1288,10 @@ async function renderCQ(tipo) {
           <div class="cq-respuesta-label">Respuesta de ${c.respondidoPor}</div>
           <div class="cq-respuesta-text">${c.respuesta}</div>
           ${c.fechaRespuesta ? `<div style="font-size:11px;color:#899298;margin-top:4px">${c.fechaRespuesta}</div>` : ''}
-        </div>` : `
+        </div>
+          <div style="margin-top:8px;text-align:right">
+            <button onclick="eliminarConsulta(${c.id})" style="padding:4px 12px;background:transparent;color:#E6223D;border:1.5px solid #E6223D;border-radius:6px;font-size:11px;font-weight:600;cursor:pointer">🗑 Eliminar</button>
+          </div>` : `
         <div class="cq-resp-form">
           <div style="font-size:12px;font-weight:600;color:#042433;margin-bottom:4px">Responder:</div>
           <select id="resp-nombre-${c.id}" style="padding:7px 12px;border:1.5px solid #dde3e8;border-radius:8px;font-size:13px;outline:none;font-family:inherit;background:#fafbfc;color:#222;width:100%">
@@ -1316,6 +1324,44 @@ async function responderConsulta(id) {
     renderCQ('respondidas');
     actualizarBadge();
   }
+}
+
+
+async function eliminarConsulta(id) {
+  if (!confirm('¿Eliminar esta consulta? Esta acción no se puede deshacer.')) return;
+  const data = await getCQ();
+  const nueva = data.filter(c => c.id !== id);
+  await saveCQ(nueva);
+  renderCQ('pendientes');
+  renderCQ('respondidas');
+  actualizarBadge();
+}
+
+async function exportarConsultas() {
+  const data = await getCQ();
+  if (!data.length) { alert('No hay consultas para exportar.'); return; }
+
+  // Construir CSV con BOM para que Excel abra bien en español
+  const bom = '﻿';
+  const cols = ['ID','Paralegal','Tipo de consulta','Detalle','Fecha','Estado','Respondido por','Respuesta','Fecha respuesta'];
+  const esc = v => '"' + String(v || '').replace(/"/g, '""') + '"';
+  const rows = data.map(c => [
+    c.id, c.nombre, c.categoria, c.consulta, c.fecha,
+    c.estado === 'pendiente' ? 'Pendiente' : 'Respondida',
+    c.respondidoPor || '', c.respuesta || '', c.fechaRespuesta || ''
+  ].map(esc).join(';'));
+
+  const csv = bom + cols.map(esc).join(';') + '
+' + rows.join('
+');
+  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+  const url  = URL.createObjectURL(blob);
+  const a    = document.createElement('a');
+  const hoy  = new Date().toLocaleDateString('en-CA', {timeZone:'America/Lima'});
+  a.href     = url;
+  a.download = `consultas_paralegales_${hoy}.csv`;
+  a.click();
+  URL.revokeObjectURL(url);
 }
 
 // ── INIT ──────────────────────────────────────────────────────────────
