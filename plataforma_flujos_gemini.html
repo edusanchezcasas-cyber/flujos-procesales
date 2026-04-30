@@ -1369,25 +1369,41 @@ async function exportarConsultas() {
   const data = await getCQ();
   if (!data.length) { alert('No hay consultas para exportar.'); return; }
 
-  // Construir CSV con BOM para que Excel abra bien en español
-  const bom = '\uFEFF';
-  const cols = ['ID','Paralegal','Tipo de consulta','Detalle','Fecha','Estado','Respondido por','Respuesta','Fecha respuesta'];
-  const esc = v => '"' + String(v || '').replace(/"/g, '""') + '"';
-  const rows = data.map(c => [
-    c.id, c.nombre, c.categoria, c.consulta, c.fecha,
-    c.estado === 'pendiente' ? 'Pendiente' : 'Respondida',
-    c.respondidoPor || '', c.respuesta || '', c.fechaRespuesta || ''
-  ].map(esc).join(';'));
+  // Cargar SheetJS dinámicamente si no está disponible
+  if (!window.XLSX) {
+    await new Promise((res, rej) => {
+      const s = document.createElement('script');
+      s.src = 'https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js';
+      s.onload = res; s.onerror = rej;
+      document.head.appendChild(s);
+    });
+  }
 
-  const csv = bom + cols.map(esc).join(';') + '\n' + rows.join('\n');
-  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-  const url  = URL.createObjectURL(blob);
-  const a    = document.createElement('a');
-  const hoy  = new Date().toLocaleDateString('en-CA', {timeZone:'America/Lima'});
-  a.href     = url;
-  a.download = `consultas_paralegales_${hoy}.csv`;
-  a.click();
-  URL.revokeObjectURL(url);
+  const cols = ['ID','Paralegal','Tipo de consulta','Detalle','Fecha','Estado','Respondido por','Respuesta','Fecha respuesta'];
+  const rows = data.map(c => ({
+    'ID'               : c.id,
+    'Paralegal'        : c.nombre || '',
+    'Tipo de consulta' : c.categoria || '',
+    'Detalle'          : c.consulta || '',
+    'Fecha'            : c.fecha || '',
+    'Estado'           : c.estado === 'pendiente' ? 'Pendiente' : 'Respondida',
+    'Respondido por'   : c.respondidoPor || '',
+    'Respuesta'        : c.respuesta || '',
+    'Fecha respuesta'  : c.fechaRespuesta || ''
+  }));
+
+  const wb = XLSX.utils.book_new();
+  const ws = XLSX.utils.json_to_sheet(rows, { header: cols });
+
+  // Anchos de columna
+  ws['!cols'] = [
+    {wch:20},{wch:14},{wch:20},{wch:40},{wch:13},
+    {wch:13},{wch:16},{wch:40},{wch:16}
+  ];
+
+  XLSX.utils.book_append_sheet(wb, ws, 'Consultas');
+  const hoy = new Date().toLocaleDateString('en-CA', {timeZone:'America/Lima'});
+  XLSX.writeFile(wb, `consultas_paralegales_${hoy}.xlsx`);
 }
 
 // ── INIT ──────────────────────────────────────────────────────────────
