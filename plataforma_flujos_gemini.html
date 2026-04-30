@@ -968,6 +968,7 @@ function showPage(name, el) {
   document.querySelectorAll('.ni').forEach(n => n.classList.remove('active'));
   document.getElementById('page-' + name).classList.add('active');
   el.classList.add('active');
+  if (name === 'consultas') cqActivar();
 }
 
 // ── SENTENCIAS Y PAGOS PILLS ──────────────────────────────────────────
@@ -1369,7 +1370,7 @@ async function exportarConsultas() {
   if (!data.length) { alert('No hay consultas para exportar.'); return; }
 
   // Construir CSV con BOM para que Excel abra bien en español
-  const bom = '﻿';
+  const bom = '\uFEFF';
   const cols = ['ID','Paralegal','Tipo de consulta','Detalle','Fecha','Estado','Respondido por','Respuesta','Fecha respuesta'];
   const esc = v => '"' + String(v || '').replace(/"/g, '""') + '"';
   const rows = data.map(c => [
@@ -1378,9 +1379,7 @@ async function exportarConsultas() {
     c.respondidoPor || '', c.respuesta || '', c.fechaRespuesta || ''
   ].map(esc).join(';'));
 
-  const csv = bom + cols.map(esc).join(';') + '
-' + rows.join('
-');
+  const csv = bom + cols.map(esc).join(';') + '\n' + rows.join('\n');
   const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
   const url  = URL.createObjectURL(blob);
   const a    = document.createElement('a');
@@ -1402,9 +1401,16 @@ async function exportarConsultas() {
 renderTabs();
 populateFilters();
 filterTable();
-actualizarBadge();
-renderCQ('pendientes');
-renderCQ('respondidas');
+// Las consultas se cargan SOLO cuando el usuario activa esa pestaña
+let cqInicializado = false;
+function cqActivar() {
+  if (!cqInicializado) {
+    cqInicializado = true;
+    actualizarBadge();
+    renderCQ('pendientes');
+    renderCQ('respondidas');
+  }
+}
 </script>
 </body>
 </html>
